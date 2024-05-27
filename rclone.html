@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My file organization workflow</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <ul class="link-list">
+      <li class="link-list">
+        <image class="invertable" src="back.svg" alt="GitHub Icon"></image>
+        <a class="icon-link" href="index.html">Back</a>
+      </li>
+    </ul>
+    <h1 class="text">My file organization workflow<br><i>2024.05.27</i></h1>
+    <p class="text">
+        I have been using <a href="https://rclone.org/">Rclone</a> to manage my
+        files for a few years now, and have developed a workflow of sorts for
+        it.
+        <br><br>
+        My setup definitely won't fit most people's needs, but I hope this text
+        will give you some inspiration to incorporate Rclone around your own
+        workflow. It's an extremely useful tool that can automate surprisingly
+        many cloud storage and backup related tasks.
+    </p>
+    <h2 class="text">General rules</h2>
+    <p class="text">
+        In order to make the most out of Rclone and its capability for
+        automation, I try to stick to the following general rules when
+        organizing my files:
+        <br><br>
+        <b class="dot-item">1.</b>
+        <br><br>
+        All files will be categorized under one of five top-level folders:
+        <code>Audio</code>, <code>Documents</code>, <code>Literature</code>,
+        <code>Pictures</code> and <code>Videos</code>. These may vary
+        widely depending on your files, but in general it's important to
+        categorize every file around a set of generic folders.
+        <br><br>
+        The top-level folders can also be verbs if it makes more sense to you,
+        eg. <code>Listen</code>, <code>Write</code>, <code>Read</code>, 
+        <code>Watch</code> and <code>Study</code>.
+        <br><br>
+        <b class="dot-item">2.</b>
+        <br><br>
+        All files will be placed in subfolders under the top-level folders, eg.
+        <code>Audio/Podcasts</code>, <code>Audio/Music</code>,
+        <code>Literature/Books</code>, <code>Literature/Comics</code>.
+        <br><br>
+        Files should never be placed directly under a top-level folder, as
+        there is always a subcategory they can be placed under. Keeping files
+        in at least depth 2 or higher in the directory tree will also help with
+        automation later on.
+        <br><br>
+        <b class="dot-item">3.</b>
+        <br><br>
+        Files placed under the previously mentioned subfolders need to follow a
+        consistent file naming convention and folder structure, but <b>only
+        limited to their respective subfolders</b>.
+        <br><br>
+        For example, files placed in <code>Audio/Music</code> could be
+        categorized further
+        in subfolders <code>"Album Artist/Album Name"</code>, whereas files
+        placed in <code>Literature/Books</code> wouldn't need to be placed in subfolders,
+        instead named as <code>"Author - Title (Year)"</code>.
+        <br><br>
+        The most important part is that each subfolder's files should be placed
+        at a consistent folder depth. For example, files in <code>Audio/Music</code> will
+        all be placed at depth 4:
+        <code>Audio/Music/Album Artist/Album Name/## Track Title.mp3</code>,
+        whereas files placed in <code>Literature/Books</code> will all be placed at depth
+        2: <code>Literature/Books/Author - Title (Year).epub</code>.
+    </p>
+    <h2 class="text">Automation</h2>
+    <p class="text">
+    (under construction)
+    </p>
+    <h2 class="text">Backups</h2>
+    <p class="text">
+    (under construction)
+    </p>
+  </body>
+</html>
+

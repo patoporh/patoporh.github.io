@@ -1,12 +1,19 @@
-@font-face {
-  font-family: Ubuntu;
-  src: url('Ubuntu-Regular.woff'), url('Ubuntu-Bold.woff');
+:root {
+  --light-gray: #cfcfcf;
+  --gray: gray;
+  --dark-gray: #2f2f2f;
+  --darkest-gray: #1f1f1f;
+}
+
+p, a, h1, h2, h3 {
+  font-family: sans-serif;
 }
 
 html {
   width: 500pt;
   margin-left: auto;
   margin-right: auto;
+  padding-bottom: 30pt;
 }
 
 body {
@@ -20,27 +27,49 @@ p {
   margin-right: auto;
   width: 300pt;
   padding: 10pt;
-  border: 1pt solid gray;
+  border: 1pt solid var(--gray);
   border-radius: 10pt;
 }
 
-ul {
+.text {
+  width: auto;
+  text-align: left;
+  border: none;
+  padding: 5pt;
+}
+
+ul.link-list {
   padding: 0pt;
   border-radius: 10pt;
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
-  border: 1pt solid gray;
+  border: 1pt solid var(--gray);
 }
 
-li {
+li.link-list {
   padding: none;
-  border-bottom: 1pt solid gray;
+  border-bottom: 1pt solid var(--gray);
   list-style-type: none;
   display: flex;
   flex-direction: row;
   white-space: nowrap;
   align-items: center;
+}
+
+.dot-item {
+  background-color: var(--light-gray);
+  padding: 2pt 6pt 2pt 6pt;
+  border-radius: 10pt;
+}
+
+h1 i {
+  color: var(--gray);
+  font-size: 50%;
+}
+
+h1.text {
+  border-bottom: 3pt dotted var(--light-gray);
 }
 
 li:last-of-type {
@@ -54,22 +83,42 @@ img {
   z-index: -1;
 }
 
-a {
+code {
+  font-family: monospace, monospace;
+  font-size: 90%;
+  background-color: var(--light-gray);
+  padding: 0pt 3pt 0pt 3pt;
+  border-radius: 3pt;
+}
+
+.icon-link {
   padding: 10pt 10pt 10pt 32pt;
 }
 
 @media (prefers-color-scheme: dark) {
   body {
     color: white;
-    background-color: #1e1e1e;
+    background-color: var(--darkest-gray);
   }
 
   a {
     color: skyblue;
   }
   
-  .icon {
+  .invertable {
     filter: invert();
+  }
+
+  .dot-item {
+    background-color: var(--dark-gray);
+  }
+  
+  code {
+    background-color: var(--dark-gray);
+  }
+  
+  h1.text {
+    border-color: var(--dark-gray);
   }
 }
 
