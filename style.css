@@ -1,0 +1,83 @@
+@font-face {
+  font-family: Ubuntu;
+  src: url('Ubuntu-Regular.woff'), url('Ubuntu-Bold.woff');
+}
+
+html {
+  width: 500pt;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+body {
+  font-family: 'Ubuntu';
+  text-align: center;
+  padding-top: 20pt;
+}
+
+p {
+  margin-left: auto;
+  margin-right: auto;
+  width: 300pt;
+  padding: 10pt;
+  border: 1pt solid gray;
+  border-radius: 10pt;
+}
+
+ul {
+  padding: 0pt;
+  border-radius: 10pt;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1pt solid gray;
+}
+
+li {
+  padding: none;
+  border-bottom: 1pt solid gray;
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+  white-space: nowrap;
+  align-items: center;
+}
+
+li:last-of-type {
+  border-bottom: none;
+}
+
+img {
+  padding-left: 10pt;
+  height: 1em;
+  position: absolute;
+  z-index: -1;
+}
+
+a {
+  padding: 10pt 10pt 10pt 32pt;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: white;
+    background-color: #1e1e1e;
+  }
+
+  a {
+    color: skyblue;
+  }
+  
+  .icon {
+    filter: invert();
+  }
+}
+
+@media screen and (max-width: 700px) {
+  html {
+    width: 100%;
+  }
+  p {
+    width: 85%;
+  }
+}
