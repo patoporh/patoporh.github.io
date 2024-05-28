@@ -13,7 +13,7 @@
         <a class="icon-link" href="index.html">Back</a>
       </li>
     </ul>
-    <h1 class="text">My file organization workflow<br><i>2024.05.27</i></h1>
+    <h1 class="text">My file organization and backup workflow<br><i>2024.05.28</i></h1>
     <p class="text">
         I have been using <a href="https://rclone.org/">Rclone</a> to backup my
         files for a few years now, and have developed a workflow of sorts for
@@ -21,10 +21,10 @@
         me to automatically create verifiable and "portable" backups with
         Rclone.
         <br><br>
-        My setup definitely won't fit most people's needs, but I hope this will
-        give you some inspiration on how to incorporate Rclone around your own
-        workflow. It's an extremely useful tool that can automate surprisingly
-        many cloud storage and backup related tasks.
+        My setup definitely won't fit most people's use cases, but I hope this
+        will give you some inspiration on how to incorporate Rclone around your
+        own workflow. It's an extremely useful tool that can automate
+        surprisingly many cloud storage and backup related tasks.
     </p>
     <h2 class="text">General rules</h2>
     <p class="text">
@@ -79,11 +79,11 @@
         to help keep track of this. The script prints out each depth files are
         found at for a given directory.
     </p>
-    <h2 class="text">Cataloguing file depths</h2>
+    <h2 class="text">Cataloging file depths</h2>
     <p class="text">
     When files are organized following the aforementioned rules, some
     interesting automation will become possible. Let's say that each of the
-    subfolders and their common file depths are catalogued in a TSV-file, like
+    subfolders and their common file depths are cataloged in a TSV-file, like
     so:
     </p>
     <pre>
@@ -118,24 +118,79 @@
     <a href="https://rclone.org/flags/#sync"><code>--backup-dir</code></a>.
     <br><br>
     To create backups with Rclone, checksum files need to be created. Unlike
-    more traditional backup tools, Rclone won't automatically create these for
-    you. This is where the aforementioned TSV-file comes in handy. Since the
-    file depth specified for each subfolder means that no files should be
+    traditional backup tools, Rclone won't automatically create these for
+    you. This is where the previously mentioned TSV-file comes in handy. Since
+    the file depth specified for each subfolder means that no files should be
     placed above that given depth, we can create checksums for all files under
     that depth.
     <br><br>
     In order to automate this, I wrote a Bash script called
-    <a href="https://github.com/patoporh/bash-scripts/blob/main/new-md5"><code>new-md5</code></a>.
+    <a href="https://github.com/patoporh/bash-scripts/blob/main/new-md5"><code>new-md5</code></a>,
+    which can recursively create MD5 files at specified depths.
+    Instead of creating one large MD5 file directly under <code>Audio/Music</code>,
+    <code>new-md5</code> can create a separate MD5 file for each <i>album</i>
+    at depth 2. The benefit of this over large MD5 files is that renaming and
+    moving directories around remains easy.
     <br><br>
-    (under construction)
+    Given that every subfolder is specified in the TSV-file with their correct
+    file depths, automating checksum creation becomes a trivial task with
+    <code>new-md5</code> or a similar helper script. See 
+    <a href="https://github.com/patoporh/bash-scripts/blob/main/new-md5"><code>new-md5</code></a>'s
+    documentation for some use cases.
     </p>
     <h2 class="text">Backups</h2>
     <p class="text">
-    (under construction)
-    </p>
-    <h2 class="text">Uploading files</h2>
-    <p class="text">
-    (under construction)
+    Since every directory now has MD5 files, backing up can be done in a more
+    "portable" fashion than some traditional backup tools allow for. With this
+    I mean that the files can simply be copied or synced as is to new drives
+    without a need to generate new checksums for the resulting backup. Since
+    <code>new-md5</code> doesn't update hashes in the generated checksum files
+    by default, there is no danger of files being changed without notice
+    between multiple new backups.
+    <br><br>
+    Rclone ties this all together. All files can be placed in a <code>default</code>-remote,
+    whether they are in the cloud or on a disk, encrypted or not. Creating backups
+    can then be automated by creating remotes named <code>backup_*</code>, have
+    a helper script cycle through each backup remote with
+    <code>rclone listremotes | grep "^backup_"</code>
+    and create backups with Rclone's <code>--backup-dir</code>, optionally along with
+    <code>--suffix</code> and <code>--suffix-keep-extension</code>.
+    <br><br>
+    Since <code>--backup-dir</code> shouldn't be in the same path as the
+    top-level folders, it's a good idea to make every remote's root include a
+    couple of meta-folders: one for files the given remote contains and one
+    for deleted files, which <code>--backup-dir</code> handles for you. I tend to
+    name these simply as <code>0</code> and <code>1</code> to save space in the
+    path length.
+    <br><br>
+    With this setup, a backup can be created with the following command:
+    <br>
+    <code>rclone sync default:/<b>0</b> backup_remote:/<b>0</b> --backup-dir backup_remote:/<b><u>1</u></b></code>
+    <br><br>
+    Verifying the backups and the default remote is also trivial with Rclone.
+    All MD5 files in a remote can be found with
+    <br>
+    <code>rclone lsf remote_name:/0 -R --files-only --include '*.md5'</code>
+    <br>
+    and subsequently checked in a loop with
+    <br>
+    <code>rclone md5sum remote_name:/0/path/to/md5 -C remote_name:/0/path/to/md5/.verify.md5</code>.
+    <br><br>
+    Although this might not be the most optimal and space-saving method for
+    creating backups, I've personally been very happy with it. Since everything
+    revolves around Rclone's remotes, this method is extremely malleable.
+    Everything can be done locally on hard drives, but can easily be scaled up to
+    include any cloud storage that Rclone supports, not to mention
+    <a href="https://rclone.org/crypt/">encryption</a>,
+    <a href="https://rclone.org/compress/">compression</a>
+    or combining remotes with the
+    <a href="https://rclone.org/union/">union remote</a>.
+    <br><br>
+    Following the
+    <a href="https://www.veeam.com/blog/321-backup-rule.html">3-2-1 rule</a>
+    when creating backups this way is also easy. The default remote can be
+    a local drive, with one of the backup remotes pointing to another local drive
+    and another to a cloud storage.
     </p>
   </body>
 </html>
