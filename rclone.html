@@ -15,12 +15,14 @@
     </ul>
     <h1 class="text">My file organization workflow<br><i>2024.05.27</i></h1>
     <p class="text">
-        I have been using <a href="https://rclone.org/">Rclone</a> to manage my
+        I have been using <a href="https://rclone.org/">Rclone</a> to backup my
         files for a few years now, and have developed a workflow of sorts for
-        it.
+        it. I'll discuss ways in which I organize my files and how that allows
+        me to automatically create verifiable and "portable" backups with
+        Rclone.
         <br><br>
-        My setup definitely won't fit most people's needs, but I hope this text
-        will give you some inspiration to incorporate Rclone around your own
+        My setup definitely won't fit most people's needs, but I hope this will
+        give you some inspiration on how to incorporate Rclone around your own
         workflow. It's an extremely useful tool that can automate surprisingly
         many cloud storage and backup related tasks.
     </p>
@@ -60,26 +62,80 @@
         limited to their respective subfolders</b>.
         <br><br>
         For example, files placed in <code>Audio/Music</code> could be
-        categorized further
-        in subfolders <code>"Album Artist/Album Name"</code>, whereas files
-        placed in <code>Videos/Movies</code> wouldn't need to be placed in subfolders,
-        instead named as <code>"Movie Title (Year)"</code>.
+        categorized further in subfolders <code>"Album Artist/Album
+        Name"</code>, whereas files placed in <code>Videos/Movies</code>
+        wouldn't need to be placed in subfolders, instead named as <code>"Movie
+        Title (Year)"</code>.
         <br><br>
         The most important part is that each subfolder's files should be placed
-        at a consistent folder depth. For example, files in <code>Audio/Music</code> will
-        all be placed at depth 4:
+        at <b>a consistent folder depth</b>. For example, files in
+        <code>Audio/Music</code> will all be placed at depth 4:
         <code>Audio/Music/Album Artist/Album Name/## Track Title.mp3</code>,
-        whereas files placed in <code>Videos/Movies</code> will all be placed at depth
-        2: <code>Videos/Movies/Movie Title (Year).mkv</code>.
+        whereas files placed in <code>Videos/Movies</code> will all be placed
+        at depth 2: <code>Videos/Movies/Movie Title (Year).mkv</code>.
+        <br><br>
+        I wrote a simple
+        <a href="https://github.com/patoporh/bash-scripts/blob/main/file-depths">Bash script</a>
+        to help keep track of this. The script prints out each depth files are
+        found at for a given directory.
     </p>
-    <h2 class="text">Automation</h2>
+    <h2 class="text">Cataloguing file depths</h2>
     <p class="text">
+    When files are organized following the aforementioned rules, some
+    interesting automation will become possible. Let's say that each of the
+    subfolders and their common file depths are catalogued in a TSV-file, like
+    so:
+    </p>
+    <pre>
+2	Audio/Music
+0	Literature/Books
+0	Videos/Movies
+2	Videos/TV Shows</pre>
+    <p class="text">
+    The first field will specify a consistent depth for files <b>relative</b>
+    to the given subfolder. This means that <code>Audio/Music</code>'s common
+    subfolders <code>Album Artist/Album Name</code> make files reside at depth
+    2, whereas files placed directly under <code>Literature/Books</code> are at
+    depth 0.
+    <br><br>
+    With this TSV-file quite a lot of automation has now become possible. The
+    following sections will contain some examples of this.
+    </p>
+    <h2 class="text">Creating checksums</h2>
+    <p class="text">
+    In order to create backups, more specifically <b>verifiable</b> backups, we
+    need to have checksums for everything. This is something backup tools like
+    <a href="https://www.borgbackup.org/">Borg</a> and
+    <a href="https://restic.net/">Restic</a> will always create for you.
+    However, something I dislike about these methods is their own ways of
+    browsing and managing the resulting backups. These tools have their own
+    commands for listing, verifying, mounting and restoring files in a backup.
+    <br><br>
+    Having become quite familiar with Rclone over the past few years, I wanted
+    to achieve something similar to these backup tools entirely within Rclone.
+    Turns out, it's entirely possible to create backups with Rclone when using
+    it with the option
+    <a href="https://rclone.org/flags/#sync"><code>--backup-dir</code></a>.
+    <br><br>
+    To create backups with Rclone, checksum files need to be created. Unlike
+    more traditional backup tools, Rclone won't automatically create these for
+    you. This is where the aforementioned TSV-file comes in handy. Since the
+    file depth specified for each subfolder means that no files should be
+    placed above that given depth, we can create checksums for all files under
+    that depth.
+    <br><br>
+    In order to automate this, I wrote a Bash script called
+    <a href="https://github.com/patoporh/bash-scripts/blob/main/new-md5"><code>new-md5</code></a>.
+    <br><br>
     (under construction)
     </p>
     <h2 class="text">Backups</h2>
     <p class="text">
     (under construction)
     </p>
+    <h2 class="text">Uploading files</h2>
+    <p class="text">
+    (under construction)
+    </p>
   </body>
 </html>
-

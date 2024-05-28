@@ -91,6 +91,14 @@ code {
   border-radius: 3pt;
 }
 
+pre {
+  font-family: monospace, monospace;
+  background-color: var(--light-gray);
+  padding: 5pt 8pt 5pt 8pt;
+  text-align: left;
+  border-radius: 6pt;
+}
+
 .icon-link {
   padding: 10pt 10pt 10pt 32pt;
 }
@@ -114,6 +122,10 @@ code {
   }
   
   code {
+    background-color: var(--dark-gray);
+  }
+  
+  pre {
     background-color: var(--dark-gray);
   }
   
